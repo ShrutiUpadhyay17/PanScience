@@ -1,0 +1,17 @@
+# Dependencies
+/node_modules
+/client/node_modules
+
+# Environment variables
+.env
+/server/.env
+/client/.env
+
+# Production build folder
+/client/build
+
+# Uploaded files
+/server/uploads
+
+# Log files
+npm-debug.log*

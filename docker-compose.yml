@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # Backend (Node.js API) Service
+  server:
+    build: ./server
+    container_name: backend-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules # Prevents local node_modules from overwriting container's
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/dbpan
+      - JWT_SECRET=your_super_secret_key_for_jwt
+    depends_on:
+      - mongodb
+
+  # Frontend (React App) Service
+  client:
+    build: ./client
+    container_name: frontend-app
+    ports:
+      - "3000:80" # Host port 3000 ko container ke port 80 se map karein
+    depends_on:
+      - server
+
+volumes:
+  mongo-data:
+    driver: local
